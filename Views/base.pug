@@ -1,0 +1,27 @@
+doctype html 
+html 
+  head 
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(name="description" content="Holibody is an online platform offering a sports initiative orchestrated by duos of exceptional coaches. We invite you to discover new journeys to well-being, all offered through our application.")
+    script(src="/js/nav_mobile.js") 
+    link(rel='stylesheet' href='/css/style.css')
+    link(rel='shorcut icon' type='image/png' href='/img/logo.png')
+    link(href='https://fonts.googleapis.com/css?family=Lato:300,300i,700' rel='stylesheet')
+
+    title Holibody | #{title}
+  body
+    // ------------------- HEADER ----------------------- //
+    include _header
+    
+    // ------------------- CONTENT ----------------------- //
+    block content 
+
+    // ------------------- FOOTER ----------------------- //
+    include _footer
+    
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js") 
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js')
+    script(src="https://js.stripe.com/v3/")
+    script(src='/js/bundled/index.js')
+    

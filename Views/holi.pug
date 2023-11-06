@@ -1,0 +1,82 @@
+extends base
+include _reviewCard
+
+//- mixin => C'est une méthode de "PUG" qui me permet de stocker un bloc HTML et le réutiliser au lieu d'écrire plusieurs fois le meme code html.
+mixin overviewBox(description, value, icon)
+  .overview-box__detail
+    svg.overview-box__icon
+      use(xlink:href=`/img/icons.svg#icon-${icon}`)
+    span.overview-box__label= description
+    span.overview-box__text= value
+
+block content
+  - console.log('HOLI PUG')
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.header__hero-img(src=`/img/holis/${holi.imageCover}`, alt=`${holi.name}`)
+
+    .heading-box
+      h1.heading-primary
+        span= `DETAILS OF ${holi.name}`
+      .heading-box__group
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-clock')
+          span.heading-box__text= `${holi.duration} days` 
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-map-pin')
+          span.heading-box__text= holi.location.description
+
+  section.section-description
+    .overview-box
+      div
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Quick facts
+          - const date = holi.startDates[0].toLocaleString('en-US', {day: 'numeric', month: 'long', year: 'numeric'})
+          +overviewBox('Next date', date, 'calendar')
+          +overviewBox('Difficulty', holi.difficulty,'trending-up')
+          +overviewBox('Participants', `${holi.maxGroupSize} people`,'user')
+          +overviewBox('Rating', `${holi.ratingsAverage} / 5`,'star')
+
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Your coach for the HOLIBODY
+
+          each coach in holi.coach
+            .overview-box__detail
+              img.overview-box__img(src=`/img/users/${coach.photo}`, alt=`${coach.name}`)
+              - if (coach.role === 'lead-coach')
+                span.overview-box__label Lead Coach
+              - if (coach.role === 'coach')
+                span.overview-box__label Coach
+              span.overview-box__text= coach.name
+
+    .description-box
+      h2.heading-secondary.ma-bt-lg= `About ${holi.name}`
+      - const paragraphs = holi.description.split('\n');
+      each p in paragraphs
+        p.description__text= p
+
+  section.section-pictures
+    each img, i in holi.images
+      .picture-box
+        img.picture-box__img(src=`/img/holis/${img}`, alt=`${i + 1}`, class=`picture-box__img--${i + 1}`)
+
+  section.section-reviews
+    .reviews
+      each review in holi.reviews
+        +reviewCard(review)
+
+  section.section-cta
+    .cta
+      .cta__img.cta__img--logo
+        img(src='/img/logo.png', alt='Holibody logo')
+
+      .cta__content
+        h2.heading-secondary What are you waiting for?
+
+        if user
+          button.btn.btn--green.span-all-rows#book-holi(data-holi-id=`${holi.id}`) Book your HOLIBODY now!
+        else
+          a.btn.btn--green.span-all-rows(href='/login') Login to book your HOLIBODY now!

@@ -1,0 +1,11 @@
+mixin reviewCard(review)
+  .reviews__card
+    .reviews__avatar
+      img.reviews__avatar-img(src=`/img/users/${review.user.photo}`, alt=`${review.user.name}`)
+      h6.reviews__user= review.user.name
+    p.reviews__text= review.review
+    .reviews__rating
+      each star in [1,2,3,4,5]
+        //- ex: 3/5 nous avons ici 3 étoiles sur 5. Dans la première itération, star est un. Et donc 1 est bien sûr moins grand que 3. Et donc la première étoile devrait, bien sûr, être une étoile verte, et c'est pourquoi ici nous mettons active, ce qui se traduira ensuite par reviews_star--active. Puis la même chose avec la deuxième et la troisième étoile. Donc, à ce stade, nous avons trois étoiles vertes. Mais le quatrième et le cinquième devraient être gris. Et donc, dans la quatrième itération, l'étoile vaut quatre. Le test est donc trois supérieur à quatre ? Non c'est faux et donc inactif. Et donc ce sera alors une étoile grise, et la même chose pour la dernière, donc la cinquième étoile.
+        svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active':'inactive'}`)
+          use(xlink:href='/img/icons.svg#icon-star')

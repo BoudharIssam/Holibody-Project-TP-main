@@ -1,0 +1,45 @@
+extends base
+
+block content
+  //- - console.log('HOLI PUG')
+  main.main
+    .card-container
+      each holi in holis
+        .card
+          .card__header
+            .card__picture
+              .card__picture-overlay &nbsp;
+              img.card__picture-img(src=`/img/holis/${holi.imageCover}`, alt=`${holi.name}`)
+
+          .card__details
+            h2.title-holi=`${holi.name}`
+            h4.card__sub-heading= `difficulty: ${holi.difficulty} ${holi.duration} day`
+            p.card__text= holi.summary
+            .card__data
+              svg.card__icon
+                us(xlink:href='/img/icons.svg#icon-map-pin')
+              span= holi.location.description
+          
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-calendar')
+              span= holi.startDates[0].toLocaleString('en-US', {day: 'numeric', month: 'long', year: 'numeric'}) 
+            
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-flag')
+              span= `${holi.location.name}`
+            
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-user')
+              span= `${holi.maxGroupSize} people` 
+              
+          .card__footer
+            p
+              span.card__footer-value= `${holi.price}€ `
+              span.card__footer-text per person
+            p.card__ratings
+              span.card__footer-value= holi.ratingsAverage
+              span.card__footer-text= ` rating (${holi.ratingsQuantity})` 
+            a.btn.btn--green.holis.btn--small(href=`/holi/${holi.slug}`) Details    

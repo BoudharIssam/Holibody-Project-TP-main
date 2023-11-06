@@ -1,0 +1,38 @@
+header.cd-header
+  //-  -- => BEM ARCHITECTURE => nav--holis => "nav" est un block et "holis" est un modificateur
+  //-  __ => BEM ARCHITECTURE => nav__search => "nav" est un block et "search" est un element
+  //- div.header__logo => Une div est l'élément de bloc standard avec PUG, je n'ai pas besoin de le mentionner avant le point. Car il sera créé automatiquement.
+  .header
+    .header__logo
+      .logo-wrapper
+        a.logo.hover-target(href='/holis') HOLIBODY
+    .nav-but-wrap
+      .menu-icon.hover-target
+        span.menu-icon__line.menu-icon__line-left
+        span.menu-icon__line
+        span.menu-icon__line.menu-icon__line-right
+  .nav
+    .nav__content.nav--user
+      ul.nav__list
+        li.nav__list-item.active-nav
+          a.hover-target(href='/') home
+        li.nav__list-item
+          a.hover-target(href='/holis') holis
+      if user 
+        li.nav__list-item.nav__list-login
+          a.nav__el(href='/me')
+            img.nav__user-img.hover-target(src=`/img/users/${user.photo}` alt=`Photo of ${user.name}`)
+            span.nav__user-name.hover-target= user.name.split(' ')[0]
+          a.hover-target.nav__el.nav__el--logout Log out
+      else
+        li.nav__list-item
+          a.hover-target(href='/login') login
+        li.nav__list-item
+          a.hover-target(href='/signup') signup
+#cursor.cursor
+#cursor2.cursor2
+#cursor3.cursor3
+
+
+
+        
