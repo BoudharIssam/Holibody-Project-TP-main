@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 
 //----------- MOTEUR DE TEMPLATE ----------------
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'Views'));
 
 //----------- GLOBAL MIDDLEWARE ----------------
 
