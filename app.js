@@ -45,8 +45,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://js.stripe.com'],
+      defaultSrc: ["'self'", 'http://127.0.0.1:8000/*'],
+      scriptSrc: [
+        "'self'",
+        'https://js.stripe.com',
+        'https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js',
+      ],
       workerSrc: ['blob:'],
       objectSrc: ["'none'"],
       styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
