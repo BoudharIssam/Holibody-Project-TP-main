@@ -49,15 +49,41 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createBookingCheckout = catchAsync(async (req, res, next) => {
-  // This is only Temporary, because it's unsecure: everyone can make bookings without paying
-  const { holi, user, price } = req.query;
+// exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+//   // This is only Temporary, because it's unsecure: everyone can make bookings without paying
+//   const { holi, user, price } = req.query;
 
-  if (!holi && !user && !price) return next();
+//   if (!holi && !user && !price) return next();
+//   await Booking.create({ holi, user, price });
+
+//   res.redirect(req.originalUrl.split("?")[0]);
+// });
+
+const createBookingCheckout = async session => {
+  const holi = session.client_reference_id;
+  const user = (await User.findOne({ email: session.customer_email }))._id;
+  const price = session.amount_total / 100;
   await Booking.create({ holi, user, price });
-
-  res.redirect(req.originalUrl.split("?")[0]);
-});
+};
+ 
+exports.webhookCheckout = (req, res, next) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook Error ${err.message}`);
+  }
+ 
+  if (event.type === 'checkout.session.completed')
+    createBookingCheckout(event.data.object);
+ 
+  res.status(200).json({ received: true });
+};
 
 exports.createBooking = factory.createOne(Booking);
 exports.getBooking = factory.getOne(Booking);

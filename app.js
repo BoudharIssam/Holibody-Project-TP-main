@@ -3,13 +3,13 @@ const { rateLimit } = require("express-rate-limit");
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
-// const helmet = require("helmet");
+const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 //------------------- HANDLERS -----------------------
-const { csp, helmetConfig } = require('./Services/helmet_csp_config');
+// const { csp, helmetConfig } = require('./Services/helmet_csp_config');
 const AppError = require("./Services/appError");
 const globalErrorController = require("./Controllers/errorController");
 const holiRouter = require("./Router/holisRoutes");
@@ -38,6 +38,28 @@ app.options('*', cors());
 
 // Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Set security HTTP headers
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'https://js.stripe.com'],
+      workerSrc: ['blob:'],
+      objectSrc: ["'none'"],
+      styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+      fontSrc: ["'self'", 'https:', 'data:'],
+      imgSrc: ["'self'", 'data:'],
+      connectSrc: [
+        "'self'",
+        'wss://holibody.onrender.com',
+        'https://checkout.stripe.com'
+      ],
+      frameSrc: ["'self'", 'https://js.stripe.com', 'https://hooks.stripe.com']
+    }
+  })
+);
+
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

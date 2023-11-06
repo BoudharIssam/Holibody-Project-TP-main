@@ -247,6 +247,7 @@ const authController = {
         message: "Token sent to email! ",
       });
     } catch (err) {
+      console.error(err);
       // En cas d'erreur
       user.passwordResetJeton = undefined; // je vide passwordResetJeton
       user.passwordResetJetonExpires = undefined; // je vide passwordResetJetonExpires

@@ -2,12 +2,14 @@ const nodemailer = require('nodemailer');
 const pug = require('pug');
 const { htmlToText } = require('html-to-text');
 
+const { htmlToText } = HtmlToText;
+
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firsName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Holiday Experience <${process.env.SENDGRID_EMAIL_FROM}>`;
+    this.from = `Holibody Experience <${process.env.SENDGRID_EMAIL_FROM}>`;
   }
 
   newTransport() {
@@ -15,16 +17,10 @@ module.exports = class Email {
       // Sendgrid
       return nodemailer.createTransport(
         {
-          host: 'in.mailsac.com',
-          secure: false, // use SSL
-          port: 25, // port for secure SMTP
           service: 'SendGrid',
           auth: {
             user: process.env.SENDGRID_USERNAME,
             pass: process.env.SENDGRID_PASSWORD,
-          },
-          tls: {
-            rejectUnauthorized: false
           }
         }
       );
@@ -39,6 +35,7 @@ module.exports = class Email {
       },
     });
   }
+
   //SEND THE ACTUAL EMAIL
   async send(template, subject) {
     // 1) Render HTML based on a pug template
@@ -55,7 +52,7 @@ module.exports = class Email {
       to: this.to,
       subject,
       html,
-      text: htmlToText(html),
+      text: htmlToText.fromString(html)
     };
 
     // 3) create a transport and send email
