@@ -59,15 +59,27 @@ const viewController = {
   // Reset Password
   getResetPassForm: (req, res) => {
     if (req.isLoggedIn) return res.redirect("/");
-    res.status(200).render("reset_ask", {
-      title: "Forget Password",
-    });
+    res
+      .status(200)
+      .set(
+        "Content-Security-Policy",
+        "script-src 'self' https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js 'unsafe-inline' 'unsafe-eval';"
+      )
+      .render("reset_ask", {
+        title: "Forget Password",
+      });
   },
   getResetPassPatchForm: (req, res) => {
     if (req.isLoggedIn) return res.redirect("/");
-    res.status(200).render("reset_patch", {
-      title: "Reset Password",
-    });
+    res
+      .status(200)
+      .set(
+        "Content-Security-Policy",
+        "script-src 'self' https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js 'unsafe-inline' 'unsafe-eval';"
+      )
+      .render("reset_patch", {
+        title: "Reset Password",
+      });
   },
   getSignUpForm: (req, res) => {
     res
