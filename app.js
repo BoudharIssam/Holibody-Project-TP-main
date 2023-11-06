@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const mongoSanitize = require("express-mongo-sanitize");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const enforce = require('express-sslify');
 
 //------------------- HANDLERS -----------------------
 const { csp, helmetConfig } = require('./Services/helmet_csp_config');
