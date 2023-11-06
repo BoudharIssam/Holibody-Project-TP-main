@@ -27,6 +27,7 @@ mongoose
 //----------- START SERVER ----------------
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
+  console.log(`App running on port http://127.0.0.1:${PORT}`);
   console.log(`Listening on port ${PORT} in the ${process.env.NODE_ENV} mode`)
 });
 

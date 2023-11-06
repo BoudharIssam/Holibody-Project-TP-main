@@ -1,5 +1,5 @@
 {
-  "name": "holibody-project-tp",
+  "name": "holibody-project-tp-main",
   "version": "1.0.0",
   "description": "Project DWWM",
   "main": "app.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BoudharIssam/Holibody-Project-TP.git"
+    "url": "git+https://github.com/BoudharIssam/Holibody-Project-TP-main.git"
   },
   "author": "Issam Boudhar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BoudharIssam/Holibody-Project-TP/issues"
+    "url": "https://github.com/BoudharIssam/Holibody-Project-TP-main/issues"
   },
-  "homepage": "https://github.com/BoudharIssam/Holibody-Project-TP#readme",
+  "homepage": "https://github.com/BoudharIssam/Holibody-Project-TP-main#readme",
   "dependencies": {
     "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
@@ -33,7 +33,6 @@
     "express-csp": "^0.1.3",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.1.1",
-    "express-sslify": "^1.2.0",
     "fs": "^0.0.1-security",
     "helmet": "^7.0.0",
     "html-to-text": "^9.0.5",

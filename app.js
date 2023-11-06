@@ -7,7 +7,6 @@ const morgan = require("morgan");
 const mongoSanitize = require("express-mongo-sanitize");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const enforce = require('express-sslify');
 
 //------------------- HANDLERS -----------------------
 const { csp, helmetConfig } = require('./Services/helmet_csp_config');
@@ -23,7 +22,6 @@ const app = express(helmetConfig);
 csp(app);
 if (process.env.NODE_ENV === 'production') {
   app.enable('trust proxy');
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 //----------- MOTEUR DE TEMPLATE ----------------
