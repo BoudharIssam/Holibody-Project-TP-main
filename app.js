@@ -6,20 +6,22 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 //------------------- HANDLERS -----------------------
 // const { csp, helmetConfig } = require('./Services/helmet_csp_config');
 const AppError = require("./Services/appError");
 const globalErrorController = require("./Controllers/errorController");
+const bookingController = require("./Controllers/bookingController");
 const holiRouter = require("./Router/holisRoutes");
 const userRouter = require("./Router/usersRoutes");
 const reviewRouter = require('./Router/reviewRoutes');
 const bookingRouter = require('./Router/bookingRoutes');
 const viewRouter = require('./Router/viewRoutes');
 
-const app = express(helmetConfig);
-csp(app);
+const app = express();
+// csp(app);
 if (process.env.NODE_ENV === 'production') {
   // app.enable('trust proxy');
   app.set('trust proxy', false);
@@ -73,6 +75,12 @@ const limiter = rateLimit({
     "Trop de requêtes depuis cette adresse IP, veuillez réessayer dans une heure !", 
 });
 app.use("/api", limiter);
+
+app.post(
+  '/webhook-checkout',
+  bodyParser.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 // Body parser, Lire les données du corps dans req.body
 app.use(express.json({ limit: "10kb" }));

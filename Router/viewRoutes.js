@@ -5,7 +5,7 @@ const express = require("express");
 const viewController = require("../Controllers/viewController");
 const authController = require("../Controllers/authController");
 const userController = require("../Controllers/userController");
-const bookingController = require("../Controllers/bookingController");
+
 
 //------------------- MIDDLEWARE -----------------------
 const router = express.Router();
@@ -15,7 +15,6 @@ router.get("/", viewController.getWelcome);
 
 router.get(
   "/holis",
-  bookingController.createBookingCheckout,
   authController.isLoggedIn,
   viewController.getOverview
 );
