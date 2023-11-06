@@ -21,7 +21,8 @@ const viewRouter = require('./Router/viewRoutes');
 const app = express(helmetConfig);
 csp(app);
 if (process.env.NODE_ENV === 'production') {
-  app.enable('trust proxy');
+  // app.enable('trust proxy');
+  app.set('trust proxy', false);
 }
 
 //----------- MOTEUR DE TEMPLATE ----------------

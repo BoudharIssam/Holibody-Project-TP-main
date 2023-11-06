@@ -291,7 +291,6 @@ const authController = {
   }),
 
   updatePassword: catchAsync(async (req, res, next) => {
-    console.log("eeerrroooor");
     // 1) Je dois trouver et recuperer l'utilisateur dans la "collection BD"
     const user = await User.findById(req.user.id).select("+password");
 
