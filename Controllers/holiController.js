@@ -7,8 +7,6 @@ const AppError = require("../Services/appError");
 const Holi = require("./../Models/holiModel");
 const factory = require("./handlerFactory");
 
-console.log('HOLI CONTROLLER')
-
 // Je configure le stockage avec multer : stockage en mémoire
 const multerStorage = multer.memoryStorage();
 
@@ -78,5 +76,4 @@ const holisController = {
   updateHoli: factory.updateOne(Holi),
   deleteHoli: factory.deleteOne(Holi),
 };
-console.log("ONEHOLI HOLI CONTROLLER");
 module.exports = holisController;

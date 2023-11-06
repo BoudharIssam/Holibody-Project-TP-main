@@ -1,6 +1,6 @@
 import axios from "axios";
 import { showAlert } from './alerts';
-console.log('LOGIN.JS')
+
 // 1) Je définis une fonction asynchrone appelée "login" qui prend comme arguments "email" et "password".
 export const login = async (email, password) => {
   try {

@@ -26,12 +26,6 @@ const createSendToken = (user, statusCode, res) => {
 
   // 2) Déclaration des options du cookie
   const cookieOptions = {
-    // Option du cookie => Spécification de la propriété d'expiration pour que le navigateur supprime automatiquement le cookie après expiration.
-    // Utilisation de `new Date()` en JavaScript pour spécifier une date.
-    // `Date.now()` retourne le nombre de millisecondes écoulées depuis le 1er janvier 1970.
-    // En ajoutant `process.env.JWT_COOKIE_EXPIRES_IN`, nous obtenons la date actuelle plus la durée en jours spécifiée.
-    // Pour convertir la durée d'un jour en millisecondes, nous multiplions par 24 heures, 60 minutes, 60 secondes et 1000 millisecondes.
-
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
@@ -39,15 +33,9 @@ const createSendToken = (user, statusCode, res) => {
   };
 
   // 3) Sécurisation du cookie en HTTPS.
-  // NE FONCTIONNE QUE SUR METHODE HTTPS
-  // secure: true => Option pour n'envoyer le cookie que sur une connexion cryptée HTTPS.
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
   // 4) Envoi du cookie
-  // res.cookie() => Attache le cookie() à RES pour l'envoyer.
-  // Spécification du nom du cookie => 'jwt'
-  // Données à envoyer dans le cookie => token
-  // Enfin, spécification des options => cookieOptions
   res.cookie("jwt", token, cookieOptions);
 
   // 5) Je cache le mot de passe dans la réponse.
@@ -94,14 +82,10 @@ const authController = {
 
     // J'entame ci dessous une verification par négation .
     // 2) Je vérifie SI email et password existent.
-    //SI emails ou password est false alors j'envoie un message d'erreur aux clients ma classe AppErro global .
     if (!email || !password) {
-      // J'utiliserai RETURN parce qu'après avoir appelé le next middleware, je veux m'assurer que cette fonction de connexion se termine tout de suite pour ne rien envoyer d'autre qui se trouve en dessous.
       return next(new AppError("Please provide email and password!", 400));
     }
     // 3) Je vérifie en BD avec Mongoose SI l'user exists correspondant à l'email && password envoyer.
-    // findOne => Je sélectionne un user non pas avec son ID mais avec son email =>  emailBD === emailBODY.
-    // model password select: false => User.findOne({ email: email }) du coup ne contiendra pas le password qui va avec cet email. Mais j'ai besoin du password pour vérifier qu'il soit bien correct du coup je vais l'ajouter, mais pour que ça fonctionne il faut que je place avant '+' pour contourner l'option que j'ai declarer dans le Usermodel "password => select: false"
     const user = await User.findOne({ email: email }).select("+password");
     console.log(user);
 
@@ -144,15 +128,9 @@ const authController = {
     }
 
     // 4) Verification token, JWT vérifie si la signature est valide ou pas.
-    // Sur cette étape je vais vérifier si quelqu'un à manipuler les données ou si le Token a expiré.
-    // 1- J'utilise la function asynchrone "verify" de JWT et lui passe le "token"et la "clé secrète" afin de créer la signature de test . Le processus de vérification ici est en charge de voir si personne n'a modifié l'id dans le playload du Token. Grâce à ça je peux être sûr à 100 % que l'utilisateur à qui j'ai émis le token est exactement celui dont l'id est a l'interieur du playload du token.
-    // 2- Ensuite j'ai remarqué que "verify" est une fonction asynchrone qui ne renvoie pas une promesse et je veux qu'elle me renvoie une promesse. Je vais donc la convertir en promesse en utilisant "promisify" pour ensuite utilisé "await".
-    // 3- Ensuite je stock le resultat dans la variable "decoded" => PAYLOAD(data) => ID USER, CREATION DATE, EXPIRE DATE. Car j'aurais besoin de l'utiliser pour vérifier les informations qu'elle possède .
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     // 5) Vérifier si l'utilisateur existe toujours.
-    // Si l'étape 4 à fonctionné, je veux checker si l'ID dans la variable "decoded" existe dans la base de données.
-    // Je stocke d'abord la valeur dans une variable et ensuite je la verifie avec un if.
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
       return next(
@@ -161,8 +139,6 @@ const authController = {
     }
 
     // 6) Vérifiez si l'utilisateur a changé de mot de passe après l'émission du Token JWT.
-    // Pour pouvoir vérifier cela, il va falloir que je crée une méthode d'instance qui va être disponible sur tous les documents. Parce que les documents sont des instances de "Model".
-    // Mais aussi parce que cette vérification va me demander beaucoup de code et donc ce code appartient au model user et pas vraiment au contrôleur .
     if (currentUser.changedPasswordAfter(decoded.iat)) {
       // currentUser = true => .changedPasswordAfter = true => (decoded.iat) = true => execute le code Error
       return next(
@@ -292,10 +268,7 @@ const authController = {
       .update(req.params.token) // J'indique la valeur que je souhaite crypter => qui est le "token" de l'user dans le params de l'URL DE LA ROUTE.
       .digest("hex"); // Et j'indique que je souhaite stocker la valeur en forme hexadécimale .
 
-    // 2) La seule information que je possède sur cet utilisateur, c'est son jeton. Par conséquent, je recherche l'utilisateur en fonction du JETON récupéré.
-    // Mongoose findOne(Propriété: valeur) => Trouve le bon document en BD grâce à une propriété avec sa valeur.
-    // J'examine également la propriété "passwordResetJetonExpires" en BD pour vérifier si elle est supérieure à l'heure actuelle, ce qui signifie qu'elle n'a pas encore expiré.
-    // Je vérifie SI le jeton n'a pas expiré avec $gt: => Requête mongoose "supérieur à" ensuite, MongoDB convertit le reste des informations pour pouvoir les comparer.
+    // 2) La seule information que je possède sur cet utilisateur, c'est son jeton. Par conséquent, je recherche l'utilisateur 
     const user = await User.findOne({
       passwordResetJeton: hashedToken,
       passwordResetJetonExpires: { $gt: Date.now() },

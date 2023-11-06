@@ -1,4 +1,3 @@
-console.log('NAV_MOBILE.JS')
 document.addEventListener('DOMContentLoaded', function () {
   (function () {
     'use strict';

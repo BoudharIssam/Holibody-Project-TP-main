@@ -1,14 +1,8 @@
 //------------------- MODULES -----------------------
 const mongoose = require("mongoose");
-
 const Holi = require("./holiModel");
 
-
 //------------------- MODEL SCHEMA HOLI -----------------------
-
-// Je vais implementer un référencement parent ici.
-// Parce que le holi et l'utilisateur sont en quelque sorte les parents de cet ensemble de données.
-// Il me faut donc aussi concevoir mon application en pensant qu'il n'y aura beaucoup d'avis pour éviter tout problème.
 const reviewSchema = new mongoose.Schema(
   {
     review: {
@@ -39,8 +33,6 @@ const reviewSchema = new mongoose.Schema(
   },
   {
     //* OBJECT OPTIONS SCHEMA
-    //Cela ne fait que s'assurer que lorsque j'ai une propriété virtuelle, il s'agit essentiellement d'un champ qui n'est pas stocké dans la base de données mais calculé à l'aide d'une autre valeur. Je veux donc que cela apparaisse également chaque fois qu'il y a une sortie.
-    // Je definis ici que je souhaite utiliser les "propriétés virtuelles" dans mon schéma
     toJSON: { virtuals: true }, // Chaque fois que les données sorte en tant que "JSON" =>  Je veux que "virtuals soit true" ce qui signifie que je veux que virtuel fasse partie du document sortant.
     toObject: { virtuals: true }, // pareil que JSON AUDESSUS
   }
@@ -62,16 +54,7 @@ reviewSchema.pre(/^find/, function (next) {
 
 //------------- METHODE STATIC POUR UTILISER LA FUNCTION AGGREGATE SUR LE MODEL ---------------
 
-// Je vais créer une fonction qui prendra en compte un identifiant d'un "HOLI" et calculera la note moyenne et le nombre de notes qui existent dans notre collection pour ce "HOLI" exacte.
-// Ensuite, à la fin, la fonction mettra même à jour le document "HOLI" correspondant.
-// calcAverageRatings => nom de la function
-// function(holi) => la fonction mémorise un ID d'un Holi, et cet ID est bien sûr pour le "holi" actuel au quelle appartient la review en cours.
 reviewSchema.statics.calcAverageRatings = async function (holiId) {
-  // le holi actuel concerner pas la requete
-  // pour le calcul, j'utilise le pipeline d'agrégation.
-  // J'utilise "THIS"(pointe vers le model actuel) pour pouvoir utiliser ensuite AGGREGATE sur le model directement
-  // aggregate => J'ai besoin de lui passer un tableau [] pour que je puisse lui indiquer plusieurs étapes.
-  // this => renvoie une promesse Alors je place un AWAIT et stock la valeur.
   const stats = await this.aggregate([
     {
       $match: { holi: holiId }, // Je sélectionne l'élément qui "match" avec ma requête "holiId"
@@ -84,7 +67,6 @@ reviewSchema.statics.calcAverageRatings = async function (holiId) {
       },
     },
   ]);
-  console.log(stats);
 
   // "SI" il y a encore aucun avis à calculer tableau a zero valeur pour faire la moyenne "ALORS" en attendant je mets des valeurs par défaut .
   if (stats.length > 0) {

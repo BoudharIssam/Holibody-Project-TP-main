@@ -1,6 +1,6 @@
 //------------------- MODULES -----------------------
 const express = require("express");
-console.log('USER ROUTES')
+
 //------------------- HANDLERS -----------------------
 const userController = require("../Controllers/userController");
 const authController = require("../Controllers/authController");
@@ -17,8 +17,7 @@ router.patch("/resetPassword/:token", authController.resetPassword);
 
 
 //--------------- MIDDLEWARE PROTEGE TOUTES LES ROUTES CI-DESSOUS -------------------
-// Si une requête arrive jusqu'ici et quel souhaite descendre plus bas, elle sera obligée d'exécuter ce middleware avant toute chose. Ce middleware protège toutes les routes se trouvant en dessous d'elle .
-// Route protégée autoriser uniquement pour les utilisateurs connectés .
+
 router.use(authController.protect);
 
 //------------------- PROTECT ROUTES (autoriser uniquement aux utilisateurs connectés) -----------------------

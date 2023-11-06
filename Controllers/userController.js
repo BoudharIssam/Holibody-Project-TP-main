@@ -31,10 +31,6 @@ const upload = multer({
 });
 
 //------------------- FONCTION FILTER BODY -----------------------
-// Je crée cette fonction full JavaScript pour filtrer les informations envoyées dans le CORPS de la requête.
-
-// Si un utilisateur décide d'envoyer des informations que je ne souhaite pas conserver, je m'assurerai que mon application ne les utilise pas. Pour cala, je dois parcourir l'objet et pour chaque élément, vérifier s'il correspond à l'un des champs autorisés.
-// Si des champs autorisés sont trouvés, je les ajouterai simplement à un nouvel objet.
 
 const filterObj = (obj, ...allowedFields) => {
   // 1) Cette fonction prend un objet en paramètre (obj) et peut prendre d'autres paramètres pour les champs que je souhaite autoriser "allowedFields" cela va créer un tableau contenant tous les arguments transmis.
@@ -113,7 +109,6 @@ const userController = {
     });
   }),
   getMe: (req, res, next) => {
-    console.log('GETME USER CONTROLLER')
     req.params.id = req.user.id;
     next();
   },

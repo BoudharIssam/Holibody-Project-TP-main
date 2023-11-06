@@ -1,5 +1,4 @@
 // Ce code définit une fonction `resizeImage` qui redimensionne une image et permet de l'afficher dans un élément HTML cible.
-
 // La fonction 'resizeImage' prend une image, des dimensions cibles et un élément cible en option.
 export const resizeImage = (
   image,                  // L'image source à redimensionner.

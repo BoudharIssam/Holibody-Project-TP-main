@@ -23,7 +23,6 @@ router
     holiController.createHoli
   );
   
-console.log('HOLIS ROUTES')
 router
   .route("/:id")
   .get(holiController.oneHoli)

@@ -1,7 +1,6 @@
 //------------------- MODULES -----------------------
 const express = require("express");
 
-console.log('VIEW ROUTES')
 //------------------- HANDLERS -----------------------
 const viewController = require("../Controllers/viewController");
 const authController = require("../Controllers/authController");

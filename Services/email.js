@@ -1,5 +1,3 @@
-// Je vais utiliser un service de développement speciale qui fait semblant d'envoyer des emails à des vraies adresses. Mais en réalité ces emails se retrouvent piégés dans une boîte de réception de développement de sorte que nous pouvons ensuite voir à quoi ressemble cet email ! Pour ensuite être sûr De ce que j'enverrai quand le site sera en production.
-
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const { htmlToText } = require('html-to-text');

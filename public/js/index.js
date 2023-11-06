@@ -6,7 +6,6 @@ import { resizeImage } from "./resizeImage";
 import { signup } from './signup';
 import { bookHoli } from './stripe';
 
-console.log('INDEX JS')
 //----------- DOM ELEMENTS ----------------
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');

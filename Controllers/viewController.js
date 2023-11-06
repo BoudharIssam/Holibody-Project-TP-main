@@ -5,8 +5,6 @@ const Users = require("./../Models/userModel");
 const Holi = require("../Models/holiModel");
 const Booking = require("../Models/bookingModel");
 
-console.log("VIEW CONTROLLER");
-
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
   if (alert === "booking")
@@ -30,7 +28,6 @@ const viewController = {
     });
   }),
   getholi: catchAsync(async (req, res, next) => {
-    console.log("GETHOLI VIEW CONTROLLER");
     // 1) Je recherche le bon holi en BD avec le champ slug, en incluant les avis associés
     const holi = await Holi.findOne({ slug: req.params.slug }).populate({
       path: "reviews",
@@ -49,7 +46,6 @@ const viewController = {
     });
   }),
   getLoginForm: (req, res) => {
-    console.log("getLoginForm VIEW CONTROLLER");
     res
       .status(200)
       .set(
@@ -85,7 +81,6 @@ const viewController = {
       });
   },
   getAccount: (req, res) => {
-    console.log("getAccount VIEW CONTROLLER");
     res
       .status(200)
       .set(
@@ -97,7 +92,7 @@ const viewController = {
       });
   },
   updateUserData: catchAsync(async (req, res, next) => {
-    console.log("UPDATE", req.body);
+    // console.log("UPDATE", req.body);
     const updatedUser = await Users.findByIdAndUpdate(
       req.user.id,
       {

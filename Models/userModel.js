@@ -4,7 +4,6 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
-console.log("USER MODEL");
 //------------------- MODEL SCHEMA HOLI -----------------------
 const userSchema = new mongoose.Schema({
   name: {
@@ -61,31 +60,18 @@ userSchema.pre("save", async function (next) {
   // Je souhaite modifier la "valeur" de la clé "password" qui ce trouve dans "this"(le document actuel). "12" représente le niveau de cryptage
   this.password = await bcrypt.hash(this.password, 12);
 
-  // Je n'ai besoin de la confirmation du mot de passe que pour confirmer que 1er mot de passe est bien correct. Mais après cela , je n'en ai plus besoin.
-  // je mets le champ "passwordConfirm" en "undefined" pour que la donnée ne soit pas enregistrée en BD
-  // Je me suis demandé comment cela fonctionne alors que j'ai mis l'option required dans mon modèl . Mais cela signifie simplement qu'il s'agit d'une entrée requise(input) et non qu'elle doit être obligatoirement conservée(persistant) dans la base de données .
   this.passwordConfirm = undefined;
   next();
 });
 
-// Cette fonction ne fonctionnera que sur "create" et "save" dans les contrôleurs.
-// Ce middleware s'exécutera juste avant qu'un nouveau document ne soit enregistré.
+
 userSchema.pre("save", async function (next) {
-  // Qu'en est-il lors de la création d'un nouveau document ? Lorsqu'un utilisateur crée un nouveau document, il modifie en fait le mot de passe, ce qui définira ensuite la propriété "passwordChangedAt".
-  // Si la propriété "password" n'a pas été modifiée OU SI le document est nouveau (isNew), je ne manipule pas la propriété "passwordChangedAt", ALORS je passe à la suite.
   if (!this.isModified("password") || this.isNew) return next();
-  // Rappel : pour "passwordChangedAt", j'y attribue un horodatage afin de pouvoir le comparer avec l'horodatage sur le token JWT.
-  // Pour éviter que le token JWT ne soit créé légèrement avant que "passwordChangedAt" ne soit créé, je le recule d'1 seconde.
-  // En plaçant "passwordChangedAt" une seconde dans le passé, je m'assure que le token est toujours créé après que le mot de passe ait été modifié.
   this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
 //------------------- INSTANCE METHOD (disponible ensuite dans tous les documents d'une certaine collection) ----------------
-
-// Le but de cette fonction est simplement de renvoyer vrai ou faux SI, lors du "LOGIN", le mot de passe envoyé par l'UTILISATEUR correspond au mot de passe crypté stocké dans sa base de données.
-// Pour cela, je dois crypter le mot de passe envoyé par l'UTILISATEUR, puis le comparer avec le mot de passe stocké en base de données.
-
 userSchema.methods.correctPassword = async function (
   userLoginPassword,
   userPasswordDB
@@ -104,10 +90,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     // console.log(this.passwordChangedAt, JWTTimestamp);
 
     // 5) Il faut que je convertisse le format date de "passwordChangedAt" en millisecondes.
-    // - getTime() => J'utilisée Cette méthode JS qui me donne un horodatage en millisecondes.
-    // - / 1000 => Je divise par 1000 pour passer de millisecondes à secondes.
-    // - J'utilise la fonction "parseInt()" pour m'assurer que le résultat est bien un nombre entier.
-    // - 10 => Cela garantit que "changedTimestamp" est un nombre entier avec une base décimale et non une chaîne de caractères.
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
       10
@@ -125,8 +107,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
 //--------------------------------------------------------------
 
-// Vu qu'il y a pas mal de code à créer en lien avec la base de données. C'est donc préférable d'opté pour une méthode d'instance et l'écrire directement dans le user model.
-// userModel => createPasswordResetToken => authController => forgotPassword
 userSchema.methods.createPasswordResetToken = function () {
   //1️⃣ Je génère mon token en utilisant "crypto" => utilise la fonction "randomBytes(32)" en spécifiant le nombre de caractères "(32)" => Je convertis ensuite ce résultat en string hexadecimale avec "toString('hex')"
   const resetJeton = crypto.randomBytes(32).toString("hex");

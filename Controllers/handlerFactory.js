@@ -2,8 +2,6 @@
 const catchAsync = require("../Services/catchAsync");
 const AppError = require("../Services/appError");
 
-console.log('FACTORY CONROLLER')
-
 //------------------- FACTORY HANDLER FONCTION -----------------------
 //✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ DELETE DOCUMENT ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅
 

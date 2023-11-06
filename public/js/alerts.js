@@ -1,4 +1,3 @@
-
 // 1) Je définis une fonction appelée "hideAlert" qui ne prend pas d'arguments.
 export const hideAlert = () => {
   // 2) Je sélectionne un élément du DOM avec la classe 'alert'.
@@ -11,9 +10,7 @@ export const hideAlert = () => {
   }
 }
 
-// Je définis une fonction appelée "showAlert" qui prend deux arguments : "type" et "msg".
-// - "type" doit être soit 'success' (succès) soit 'error' (erreur).
-// - "msg" est le message à afficher dans l'alerte.
+
 export const showAlert = (type, msg) => {
   // 1) J'appelle la fonction "hideAlert" pour supprimer toute alerte précédente.
   hideAlert();
