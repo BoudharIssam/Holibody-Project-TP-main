@@ -25,31 +25,29 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 //----------- MOTEUR DE TEMPLATE ----------------
-app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views"));
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 //----------- GLOBAL MIDDLEWARE ----------------
-
-// Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, "public")));
 
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
 app.use(cors());
 app.options('*', cors());
 
+// Servir les fichiers statiques
+app.use(express.static(path.join(__dirname, 'public')));
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
 
 const limiter = rateLimit({
   // Ici, je définis le nombre de requêtes par API (par utilisateur) que j'acceptons.
   windowMs: 60 * 60 * 1000, 
   max: 100, 
   message:
-    "Trop de requêtes depuis cette adresse IP, veuillez réessayer dans une heure !",
-  
+    "Trop de requêtes depuis cette adresse IP, veuillez réessayer dans une heure !", 
 });
 app.use("/api", limiter);
 
