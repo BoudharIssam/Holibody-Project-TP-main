@@ -19,7 +19,7 @@ export const bookHoli = async (holiId) => {
     if (session.data.session.url === 'success') {
       showAlert('success', 'Booking successfully');
       window.setTimeout(() => {
-        location.assign('/holis');
+        location.assign('/me');
       }, 1000);
     }
   } catch (err) {
